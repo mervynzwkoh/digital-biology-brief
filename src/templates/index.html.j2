@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — Archive</title>
+    <meta name="description" content="Archive of weekly digests covering ML for drug discovery, protein design, and virtual cell modelling.">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-purple: #bc8cff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .brief-list {
+            list-style: none;
+        }
+
+        .brief-list li {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brief-list a {
+            display: block;
+            padding: 1rem 0.5rem;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: background-color 0.15s ease;
+            border-radius: 4px;
+        }
+
+        .brief-list a:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .brief-list .date-label {
+            font-weight: 600;
+        }
+
+        .empty {
+            color: var(--text-muted);
+            font-style: italic;
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <p>Archive of weekly digests</p>
+        </header>
+
+        {% if briefs %}
+        <ul class="brief-list">
+            {% for brief in briefs %}
+            <li>
+                <a href="{{ brief.path }}">
+                    <span class="date-label">{{ brief.date }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">No briefs yet — check back after the first run!</p>
+        {% endif %}
+
+        <footer>
+            <p>Last updated {{ generated_at }}</p>
+        </footer>
+    </div>
+</body>
+</html>

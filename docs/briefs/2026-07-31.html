@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — 2026-07-31</title>
+    <meta name="description" content="Weekly digest of frontier research, events, and jobs in ML for drug discovery, protein design, and virtual cell modelling — 2026-07-31">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --gradient-research: linear-gradient(135deg, #1a1b3a 0%, #162447 100%);
+            --gradient-events: linear-gradient(135deg, #1a2e1a 0%, #16341a 100%);
+            --gradient-jobs: linear-gradient(135deg, #2d1a1a 0%, #34231a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .date {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .item h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .item h3 a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .tag-source { color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.3); }
+        .tag-date { color: var(--text-muted); }
+
+        .item-body h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-body p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .item-body .caveats {
+            font-style: italic;
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+        }
+
+        /* Events & Jobs items — simpler layout */
+        .item-simple {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .item-simple .details {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .item-simple .details span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .item-simple .relevance {
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 0.3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .empty-section {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .item { padding: 1rem; }
+            .item-simple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <div class="date">2026-07-31</div>
+            <div class="subtitle">ML for drug discovery · Protein structure & design · Virtual cell modelling</div>
+        </header>
+
+        <!-- Research Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">🔬</span>
+                <h2>Frontier Research</h2>
+                <span class="count">12 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42397283/">Knowledge Distillation of a Protein Language Model Yields a Foundational Implicit Solvent Model.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-28</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Implicit solvent models (ISMs) promise to deliver the accuracy of explicit solvent simulations at a fraction of their computational cost. However, des...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42441955/">Advancing In Silico Drug Design with Bayesian Refinement of AlphaFold Models.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-28</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Virtual screening has become an indispensable tool in modern structure-based drug discovery, enabling the identification of candidate molecules by com...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42497056/">GoMA-DTA: A Gene Ontology-Guided Multimodal Attention Fusion Model for Drug-Target Affinity Prediction.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-24</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Accurate prediction of drug-target affinity (DTA) is essential for accelerating drug discovery. Although pretrained protein language models have achie...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42527603/">Miniaturizing and modifying natural proteins with Raygun.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-29</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Proteins have evolved over billions of years through coordinated substitutions, insertions and deletions, yet computational protein design cannot full...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42492505/">DeorphaNN: Virtual screening of GPCR peptide agonists using AlphaFold-predicted active-state complexes and deep learning embeddings.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-23</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Peptide-activated G protein-coupled receptors (GPCRs) regulate physiological processes through interaction with neuropeptides and peptide hormones. Id...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42402023/">A Unified Molecular Graph and Protein Language Model Framework for Predicting Human Drug-Hormone Receptor Interactions with Structure-Aware Validation.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-27</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Hormones regulate many essential biological processes by interacting with specific receptors that control gene expression, metabolism, growth, and imm...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2607.27973v1">TAPO: Transition-Aware Policy Optimization for LLM Agents</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-07-30</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Recently, Reinforcement Learning (RL) has emerged as a crucial paradigm for the post-training of Large Language Model (LLM) agents. However, existing ...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2607.27787v1">LoRA Scaffolded Policy Optimization (LSPO): A Sampling-Time Low-Rank Scaffold for Recovering Reinforcement-Learning Gradient on Zero-Reward Cliff Prompts</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-07-30</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Reinforcement learning from verifiable rewards (RLVR) for mathematical reasoning suffers from a structural blind spot: on &#34;cliff&#34; prompts-those on whi...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42531328/">Assessing scale and predictive diversity in models for single-cell transcriptomics based on Geneformer.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-30</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Single-cell transcriptomic data provide critical insights into cellular states and disease mechanisms, and foundation models have recently emerged as ...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42507643/">Enhancing missense variant classification in predicted intrinsically disordered regions.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-01-01</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Classifying disease-causing missense variants in intrinsically disordered regions (IDRs) remains a significant challenge, with over 25% of known delet...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42498639/">SimBinder-IF: Structure-Aware Antibody Affinity Optimization via Efficient Preference Learning.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-24</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>MOTIVATION: Antibody therapeutic efficacy depends on high-affinity target engagement, yet laboratory affinity maturation is slow and costly. Most prot...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42489519/">EscaPRRS-ORF5: A Structure-Aware Evolutionary Framework for Prioritizing Immune Escape-Prone Variants in Porcine Reproductive and Respiratory Syndrome Virus.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-07-23</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>MOTIVATION: Porcine Reproductive and Respiratory Syndrome Virus (PRRSV) is a rapidly evolving RNA virus causing significant economic losses, posing a ...</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>[Dry run — no LLM call]</p>
+                    
+
+                    
+                    <h4>Caveats</h4>
+                    <p class="caveats">[Dry run]</p>
+                    
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">📅</span>
+                <h2>Events</h2>
+                <span class="count">3 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.youtube.com/watch?v=rfozejjZbLY">Behind The Scenes In A Singapore Biotech Startup</a></h3>
+                        <div class="details">
+                            <span>📆 2026-07-31</span>
+                            <span>📍 [Dry run]</span>
+                            <span>🏢 [Dry run]</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.sginnovate.com/events">Events Connect with Singapore&#39;s vibrant Deep Tech Community</a></h3>
+                        <div class="details">
+                            <span>📆 2026-07-31</span>
+                            <span>📍 [Dry run]</span>
+                            <span>🏢 [Dry run]</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.sginnovate.com/event/scri-clinical-trials-symposium-2026">SCRI Clinical Trials Symposium 2026</a></h3>
+                        <div class="details">
+                            <span>📆 2026-07-31</span>
+                            <span>📍 [Dry run]</span>
+                            <span>🏢 [Dry run]</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">💼</span>
+                <h2>Jobs</h2>
+                <span class="count">15 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f520bd492af11e47a4f8bdc4626875fb">Research Fellow - Bioinformatician (Cancer Science Institute)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-30</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/144e16d7f102f03efd0cb3092ea16604">Scientific Intern</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-10</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f41648a82cb1869f60a8fe44d1046623">Bioinformatician</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-01</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/7a0de459436cad8bc98507c706620fc8">Research Fellow/ Senior Research Fellow (Ref: NHCS/RF/JY)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-20</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/94bfe32b5b1ffd2f1b9c2a9c7b801ba3">Principal Scientist – Computational Drug Discovery (A*STAR BII)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-15</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/recursionpharmaceuticals/jobs/8069513">Engineering Manager - Machine Learning</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-24</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/16e1879627b87fb6012693e311761c6c">Project Officer (Transcriptome Engineering)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-28</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/044969b1f46b37b57288014eae9131fd">Principal Investigators (GIS)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-22</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/19c4817d5de4d7e300e02b3d48516fad">Bioinformatician</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-03</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/9ee9145a0229f4fb09011bd37c50eeab">Technical Professional - Data Science (AI Engineer)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-31</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/ececc12f70a16215cdc1bd259794f970">Data Scientist (Government Projects)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-31</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/4d4eddd96b150646b74f7802b1c808cf">Research Fellow (Pharmacy and Pharmaceutical Sciences)</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-01</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/valohealth/jobs/8443273002">Staff Data Scientist, Computational Biology</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-24</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/valohealth/jobs/8550220002">Staff Data Scientist, Machine Learning in Epidemiology and Patient Data Products</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-05-28</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/2c832a4c791ecffa6f4f4d6b22496af8">Research Assistant/Associate</a></h3>
+                        <div class="details">
+                            <span>🏢 [Dry run]</span>
+                            <span>📍 [Dry run]</span>
+                            <span>📆 Posted: 2026-07-20</span>
+                        </div>
+                        
+                        <div class="relevance">→ [Dry run — no LLM call]</div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <footer>
+            <p>Generated 2026-07-31 07:55 UTC · <a href="../index.html">← Archive</a></p>
+            <p>Digital Biology Weekly Brief — automated with ❤️ and Claude Haiku</p>
+        </footer>
+    </div>
+</body>
+</html>

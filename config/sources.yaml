@@ -1,0 +1,124 @@
+# arXiv configuration
+arxiv:
+  categories:
+    - "q-bio.BM"    # Biomolecules
+    - "q-bio.GN"    # Genomics
+    - "q-bio.QM"    # Quantitative Methods
+    - "q-bio.MN"    # Molecular Networks
+    - "cs.LG"       # Machine Learning
+    - "cs.AI"       # Artificial Intelligence
+  max_results: 100
+  # Additional keyword filter applied post-fetch (ANDed with category)
+  keyword_filter:
+    - "protein"
+    - "drug"
+    - "molecular"
+    - "cell"
+    - "genomic"
+    - "biological"
+    - "clinical"
+    - "pharmaceutical"
+    - "binding"
+    - "docking"
+    - "folding"
+    - "diffusion"
+    - "foundation model"
+
+# bioRxiv / medRxiv configuration
+biorxiv:
+  categories:
+    - "bioinformatics"
+    - "genomics"
+    - "synthetic-biology"
+    - "molecular-biology"
+    - "pharmacology-and-toxicology"
+    - "systems-biology"
+    - "biophysics"
+  max_results: 100
+
+# PubMed configuration
+pubmed:
+  search_terms:
+    - "(machine learning OR deep learning OR artificial intelligence) AND (drug discovery OR protein structure OR virtual cell)"
+    - "(foundation model OR transformer OR diffusion model) AND (biology OR protein OR genomics)"
+    - "(AlphaFold OR ESM OR protein language model) AND (prediction OR design)"
+  max_results: 50
+  email: "bot@digital-biology-brief.dev"  # NCBI etiquette - override via NCBI_EMAIL env var
+  tool_name: "digital-biology-brief"
+
+# Semantic Scholar configuration
+semantic_scholar:
+  search_queries:
+    - "machine learning drug discovery"
+    - "protein structure prediction deep learning"
+    - "virtual cell simulation"
+    - "protein design diffusion model"
+    - "single cell foundation model"
+  fields: "title,url,abstract,publicationDate,citationCount,externalIds"
+  max_results: 50
+
+# RSS feeds - lab/company blogs
+rss_blogs:
+  feeds:
+    - name: "Google DeepMind Blog"
+      url: "https://deepmind.google/blog/rss.xml"
+    - name: "Recursion Blog"
+      url: "https://www.recursion.com/news/rss.xml"
+    - name: "Insilico Medicine"
+      url: "https://insilico.com/blog/rss"
+    - name: "NVIDIA Healthcare Blog"
+      url: "https://blogs.nvidia.com/blog/category/healthcare/feed/"
+    - name: "Arc Institute Blog"
+      url: "https://arcinstitute.org/blog/rss.xml"
+
+# RSS feeds - journal tables of contents
+rss_journals:
+  feeds:
+    - name: "Nature Methods"
+      url: "https://www.nature.com/nmeth.rss"
+    - name: "Nature Biotechnology"
+      url: "https://www.nature.com/nbt.rss"
+    - name: "Nature Machine Intelligence"
+      url: "https://www.nature.com/natmachintell.rss"
+    - name: "Cell Systems"
+      url: "https://www.cell.com/cell-systems/rss"
+
+# Hacker News configuration
+hackernews:
+  min_score: 5
+  max_results: 30
+
+# Google Custom Search Engine
+google_cse:
+  # LinkedIn public posts/pulse (research social chatter)
+  linkedin_queries:
+    - "AI drug discovery protein"
+    - "computational biology machine learning"
+    - "virtual cell model"
+  linkedin_site_restrict: "site:linkedin.com/posts OR site:linkedin.com/pulse"
+  # Events queries
+  events_queries:
+    - "Singapore AI biology drug discovery conference workshop"
+    - "Singapore computational biology meetup"
+    - "Singapore biotech AI event"
+  events_site_restrict: "site:lu.ma OR site:eventbrite.sg OR site:eventbrite.com"
+  max_results_per_query: 10
+
+# Singapore community event pages to scrape
+sg_events:
+  pages:
+    - name: "SGInnovate Events"
+      url: "https://www.sginnovate.com/events"
+      type: "html"
+    # Add more SG community pages as you discover them.
+    # A*STAR and NUS seminar pages change structure frequently —
+    # verify URLs before adding.
+  luma_calendars: []
+  # Add Luma calendar slugs here, e.g.:
+  # - "sg-ai-bio-meetup"
+
+# Section item caps (after ranking, before LLM)
+item_caps:
+  research: 12
+  events: 8
+  jobs: 15

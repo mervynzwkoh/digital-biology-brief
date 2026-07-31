@@ -1,0 +1,14 @@
+# Companies using Greenhouse job boards
+# Slugs verified against boards-api.greenhouse.io — only include active boards
+greenhouse:
+  - recursionpharmaceuticals
+  - isomorphiclabs
+  - evolutionaryscale
+  - arcinstitute
+  - atomwise
+  - valohealth
+
+# Companies using Lever job boards
+# Note: many biotech companies have moved away from Lever or have non-standard slugs.
+# Add verified slugs here as you discover them.
+lever: []

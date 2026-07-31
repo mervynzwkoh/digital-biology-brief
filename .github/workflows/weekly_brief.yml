@@ -1,0 +1,50 @@
+name: Weekly Brief
+
+on:
+  schedule:
+    # Sunday 23:00 UTC = Monday 07:00 SGT
+    - cron: '0 23 * * 0'
+  workflow_dispatch:  # Manual trigger for testing
+
+permissions:
+  contents: write   # Needed to commit state/seen.json and docs/
+
+jobs:
+  build-and-send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GOOGLE_CSE_API_KEY: ${{ secrets.GOOGLE_CSE_API_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+          NCBI_EMAIL: ${{ secrets.NCBI_EMAIL }}
+          S2_API_KEY: ${{ secrets.S2_API_KEY }}
+          GITHUB_PAGES_URL: ${{ secrets.GITHUB_PAGES_URL }}
+          PYTHONPATH: ${{ github.workspace }}
+        run: python -m src.main
+
+      - name: Commit updated state and briefs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state/seen.json docs/
+          git diff --cached --quiet || git commit -m "chore: update weekly brief $(date -u +%Y-%m-%d)"
+          git push
