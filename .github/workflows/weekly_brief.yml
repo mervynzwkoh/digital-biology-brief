@@ -37,7 +37,7 @@ jobs:
           GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
           NCBI_EMAIL: ${{ secrets.NCBI_EMAIL }}
           S2_API_KEY: ${{ secrets.S2_API_KEY }}
-          GITHUB_PAGES_URL: ${{ secrets.GITHUB_PAGES_URL }}
+          GITHUB_PAGES_URL: ${{ secrets.PAGES_URL }}
           PYTHONPATH: ${{ github.workspace }}
         run: python -m src.main
 
