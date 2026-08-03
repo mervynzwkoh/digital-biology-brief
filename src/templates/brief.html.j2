@@ -246,7 +246,7 @@
             {% for item in research_items %}
             <div class="item">
                 <div class="item-header">
-                    <h3><a href="{{ item.url }}">{{ item.headline or item.title }}</a></h3>
+                    <h3><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.headline or item.title }}</a></h3>
                 </div>
                 <div class="item-meta">
                     <span class="tag tag-source">{{ item.source_name }}</span>
@@ -288,7 +288,7 @@
             <div class="item">
                 <div class="item-simple">
                     <div>
-                        <h3><a href="{{ item.url }}">{{ item.name or item.title }}</a></h3>
+                        <h3><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.name or item.title }}</a></h3>
                         <div class="details">
                             {% if item.date %}<span>📆 {{ item.date }}</span>{% endif %}
                             {% if item.location %}<span>📍 {{ item.location }}</span>{% endif %}
@@ -319,7 +319,7 @@
             <div class="item">
                 <div class="item-simple">
                     <div>
-                        <h3><a href="{{ item.url }}">{{ item.name or item.title }}</a></h3>
+                        <h3><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.name or item.title }}</a></h3>
                         <div class="details">
                             {% if item.organizer_or_employer %}<span>🏢 {{ item.organizer_or_employer }}</span>{% endif %}
                             {% if item.location %}<span>📍 {{ item.location }}</span>{% endif %}

@@ -8,12 +8,11 @@ arxiv:
     - "cs.LG"       # Machine Learning
     - "cs.AI"       # Artificial Intelligence
   max_results: 100
-  # Additional keyword filter applied post-fetch (ANDed with category)
+  # Biology-specific keywords — cs.LG/cs.AI papers must match these.
+  # q-bio papers get a lighter filter. Avoid generic ML terms here.
   keyword_filter:
     - "protein"
     - "drug"
-    - "molecular"
-    - "cell"
     - "genomic"
     - "biological"
     - "clinical"
@@ -21,8 +20,17 @@ arxiv:
     - "binding"
     - "docking"
     - "folding"
-    - "diffusion"
-    - "foundation model"
+    - "enzyme"
+    - "antibody"
+    - "single-cell"
+    - "transcriptomics"
+    - "AlphaFold"
+    - "virtual screening"
+    - "ADMET"
+    - "pharmacokinetics"
+    - "cryo-EM"
+    - "gene expression"
+    - "variant effect"
 
 # bioRxiv / medRxiv configuration
 biorxiv:

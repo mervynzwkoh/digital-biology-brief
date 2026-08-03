@@ -21,24 +21,49 @@ NAMESPACE = {"atom": "http://www.w3.org/2005/Atom"}
 
 
 def _build_query(config: dict) -> str:
-    """Build an arXiv search query string from config categories + keyword filter."""
+    """Build an arXiv search query string from config categories + keyword filter.
+
+    Strategy: q-bio.* papers are inherently relevant, so they only get a light
+    keyword filter.  cs.LG / cs.AI papers MUST match biology-specific terms to
+    avoid pulling in pure ML work.
+    """
     categories = config.get("categories", ["q-bio.BM", "cs.LG", "cs.AI"])
     keyword_filter = config.get("keyword_filter", [])
 
-    # Category clause: cat:q-bio.BM OR cat:cs.LG OR ...
-    cat_clause = " OR ".join(f"cat:{cat}" for cat in categories)
+    # Split categories into biology-native vs ML-general
+    bio_cats = [c for c in categories if c.startswith("q-bio")]
+    ml_cats = [c for c in categories if not c.startswith("q-bio")]
 
-    if not keyword_filter:
-        return cat_clause
+    # Biology-specific keywords that cs.LG/cs.AI papers must match
+    bio_keywords = [
+        kw for kw in keyword_filter
+        if kw.lower() not in ("diffusion", "foundation model", "transformer")
+    ]
 
-    # Keyword clause: ti:"protein" OR abs:"protein" OR ...
-    kw_parts = []
-    for kw in keyword_filter:
-        kw_parts.append(f'ti:"{kw}"')
-        kw_parts.append(f'abs:"{kw}"')
-    kw_clause = " OR ".join(kw_parts)
+    clauses = []
 
-    return f"({cat_clause}) AND ({kw_clause})"
+    # q-bio papers: include if they match any keyword (broad — these are already bio)
+    if bio_cats:
+        bio_cat_clause = " OR ".join(f"cat:{c}" for c in bio_cats)
+        if keyword_filter:
+            kw_parts = []
+            for kw in keyword_filter:
+                kw_parts.append(f'ti:"{kw}"')
+                kw_parts.append(f'abs:"{kw}"')
+            clauses.append(f"(({bio_cat_clause}) AND ({' OR '.join(kw_parts)}))")
+        else:
+            clauses.append(f"({bio_cat_clause})")
+
+    # cs.LG/cs.AI papers: only include with strict biology-specific keywords
+    if ml_cats and bio_keywords:
+        ml_cat_clause = " OR ".join(f"cat:{c}" for c in ml_cats)
+        kw_parts = []
+        for kw in bio_keywords:
+            kw_parts.append(f'ti:"{kw}"')
+            kw_parts.append(f'abs:"{kw}"')
+        clauses.append(f"(({ml_cat_clause}) AND ({' OR '.join(kw_parts)}))")
+
+    return " OR ".join(clauses) if clauses else "cat:q-bio.BM"
 
 
 def fetch() -> list[RawItem]:

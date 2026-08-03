@@ -29,10 +29,10 @@ def fetch() -> list[RawItem]:
     search_queries = [
         "computational biology",
         "bioinformatics",
-        "machine learning",
         "drug discovery",
-        "data science biology",
-        "AI research",
+        "protein engineering",
+        "cheminformatics",
+        "genomics data scientist",
     ]
 
     seen_ids: set[str] = set()

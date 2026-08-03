@@ -124,6 +124,62 @@ def _simple_index(briefs: list[dict]) -> str:
 
 # ── Telegram Digest ───────────────────────────────────────────────────────────
 
+# Max items per section in the Telegram digest (keeps messages under 4096 chars)
+TELEGRAM_MAX_RESEARCH = 8
+TELEGRAM_MAX_EVENTS = 6
+TELEGRAM_MAX_JOBS = 10
+
+
+def _build_research_section(items: list[SummarizedItem]) -> str:
+    """Build the research section text for Telegram."""
+    if not items:
+        return ""
+    lines = ["\U0001f52c <b>Frontier Research</b>\n"]
+    for item in items[:TELEGRAM_MAX_RESEARCH]:
+        headline = item.headline or item.title
+        lines.append(f"\u2022 <b>{_escape_html(headline)}</b>")
+        if item.whats_new:
+            first_sentence = item.whats_new.split(". ")[0] + "."
+            lines.append(f"  {_escape_html(first_sentence)}")
+        lines.append(f'  <a href="{item.url}">\u2192 Read</a>\n')
+    remaining = len(items) - TELEGRAM_MAX_RESEARCH
+    if remaining > 0:
+        lines.append(f"<i>... and {remaining} more in the full brief</i>\n")
+    return "\n".join(lines)
+
+
+def _build_events_section(items: list[SummarizedItem]) -> str:
+    """Build the events section text for Telegram."""
+    if not items:
+        return ""
+    lines = ["\U0001f4c5 <b>Events</b>\n"]
+    for item in items[:TELEGRAM_MAX_EVENTS]:
+        name = item.name or item.title
+        location = f" ({_escape_html(item.location)})" if item.location else ""
+        date_info = f" \u2014 {_escape_html(item.date)}" if item.date else ""
+        lines.append(f"\u2022 <b>{_escape_html(name)}</b>{date_info}{location}")
+        if item.relevance_note:
+            lines.append(f"  {_escape_html(item.relevance_note)}")
+        lines.append(f'  <a href="{item.url}">\u2192 Details</a>\n')
+    return "\n".join(lines)
+
+
+def _build_jobs_section(items: list[SummarizedItem]) -> str:
+    """Build the jobs section text for Telegram."""
+    if not items:
+        return ""
+    lines = ["\U0001f4bc <b>Jobs</b>\n"]
+    for item in items[:TELEGRAM_MAX_JOBS]:
+        name = item.name or item.title
+        employer = f" @ {_escape_html(item.organizer_or_employer)}" if item.organizer_or_employer else ""
+        location = f" ({_escape_html(item.location)})" if item.location else ""
+        lines.append(f"\u2022 <b>{_escape_html(name)}</b>{employer}{location}")
+        if item.relevance_note:
+            lines.append(f"  {_escape_html(item.relevance_note)}")
+        lines.append(f'  <a href="{item.url}">\u2192 Apply</a>\n')
+    return "\n".join(lines)
+
+
 def render_telegram_digest(
     items: list[SummarizedItem],
     brief_url: str,
@@ -137,77 +193,39 @@ def render_telegram_digest(
         date_str: Override date string. Defaults to today.
 
     Returns:
-        List of message strings (1 if total < 4000 chars, else 3 by section).
+        List of message strings, each guaranteed to be valid HTML under 4096 chars.
     """
     if date_str is None:
         date_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
     groups = _group_by_section(items)
 
-    # Build section strings
-    sections: dict[str, str] = {}
-
-    # Research section
-    if groups["research"]:
-        lines = ["🔬 <b>Frontier Research</b>\n"]
-        for item in groups["research"]:
-            headline = item.headline or item.title
-            lines.append(f"• <b>{_escape_html(headline)}</b>")
-            if item.whats_new:
-                # First sentence only for Telegram
-                first_sentence = item.whats_new.split(". ")[0] + "."
-                lines.append(f"  {_escape_html(first_sentence)}")
-            lines.append(f"  <a href=\"{item.url}\">→ Read</a>\n")
-        sections["research"] = "\n".join(lines)
-
-    # Events section
-    if groups["events"]:
-        lines = ["📅 <b>Events</b>\n"]
-        for item in groups["events"]:
-            name = item.name or item.title
-            location = f" ({item.location})" if item.location else ""
-            date_info = f" — {item.date}" if item.date else ""
-            lines.append(f"• <b>{_escape_html(name)}</b>{date_info}{_escape_html(location)}")
-            if item.relevance_note:
-                lines.append(f"  {_escape_html(item.relevance_note)}")
-            lines.append(f"  <a href=\"{item.url}\">→ Details</a>\n")
-        sections["events"] = "\n".join(lines)
-
-    # Jobs section
-    if groups["jobs"]:
-        lines = ["💼 <b>Jobs</b>\n"]
-        for item in groups["jobs"]:
-            name = item.name or item.title
-            employer = f" @ {item.organizer_or_employer}" if item.organizer_or_employer else ""
-            location = f" ({item.location})" if item.location else ""
-            lines.append(f"• <b>{_escape_html(name)}</b>{_escape_html(employer)}{_escape_html(location)}")
-            if item.relevance_note:
-                lines.append(f"  {_escape_html(item.relevance_note)}")
-            lines.append(f"  <a href=\"{item.url}\">→ Apply</a>\n")
-        sections["jobs"] = "\n".join(lines)
-
-    # Header
+    # Header — included at the top of EVERY message so the link is always visible
     header = (
-        f"🧬 <b>Digital Biology Weekly Brief — {date_str}</b>\n\n"
-        f"📖 <a href=\"{brief_url}\">Full brief with technical details →</a>\n\n"
+        f"\U0001f9ec <b>Digital Biology Weekly Brief \u2014 {date_str}</b>\n\n"
+        f'\U0001f4d6 <a href="{brief_url}">Full brief with technical details \u2192</a>\n\n'
     )
 
-    # Try single message first
-    full_message = header + "\n".join(sections.values())
+    # Build section texts
+    research_text = _build_research_section(groups["research"])
+    events_text = _build_events_section(groups["events"])
+    jobs_text = _build_jobs_section(groups["jobs"])
 
+    # Try single message first
+    full_message = header + research_text + events_text + jobs_text
     if len(full_message) < 4000:
         return [full_message]
 
-    # Split into separate messages by section
+    # Split into separate messages — each gets the header with the Pages link
     messages: list[str] = []
-    for section_key in ("research", "events", "jobs"):
-        if section_key in sections:
-            section_header = header if section_key == "research" else ""
-            msg = section_header + sections[section_key]
-            if len(msg) > 4000:
-                # Truncate if a single section is too long
-                msg = msg[:3900] + "\n\n<i>(truncated — see full brief)</i>"
-            messages.append(msg)
+    for section_text in (research_text, events_text, jobs_text):
+        if not section_text:
+            continue
+        msg = header + section_text
+        # Safety: if still too long, drop items from the end (never truncate mid-tag)
+        if len(msg) > 4000:
+            msg = header + section_text.rsplit("\n\n", 1)[0] + "\n\n<i>(see full brief for more)</i>"
+        messages.append(msg)
 
     return messages if messages else [header + "<i>No items this week.</i>"]
 

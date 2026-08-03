@@ -127,8 +127,12 @@ def run(dry_run: bool = False, verbose: bool = False) -> None:
     logger.info("  HTML brief: %s", brief_relative_path)
 
     # Build the GitHub Pages URL (will be correct once Pages is enabled)
-    # Uses the GITHUB_PAGES_URL env var if set, otherwise a placeholder
-    pages_base = os.environ.get("GITHUB_PAGES_URL", "https://<username>.github.io/digital-biology-brief")
+    # Check both PAGES_URL and GITHUB_PAGES_URL for compatibility
+    pages_base = (
+        os.environ.get("PAGES_URL")
+        or os.environ.get("GITHUB_PAGES_URL")
+        or "https://<username>.github.io/digital-biology-brief"
+    )
     brief_url = f"{pages_base}/{brief_relative_path}"
 
     # 4b. Render and send Telegram digest

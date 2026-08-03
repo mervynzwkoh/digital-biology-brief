@@ -169,12 +169,47 @@ def _parse_events_jobs_response(response_text: str, items: list[RawItem]) -> lis
 
 
 def _extract_field(block: str, field_name: str) -> str:
-    """Extract a named field from a response block."""
-    # Match "FIELD_NAME: value" possibly spanning multiple lines until next field or end
-    pattern = rf"{re.escape(field_name)}\s*:\s*(.*?)(?=\n[A-Z][A-Z\s/\']+:|$)"
+    """Extract a named field from a response block.
+
+    Handles variations in LLM output like:
+    - HEADLINE: value
+    - **HEADLINE**: value
+    - HEADLINE:\nvalue
+    - 1. HEADLINE: value
+    """
+    # Known field markers that signal the start of the next field
+    all_fields = [
+        "HEADLINE", "WHAT'S NEW", "WHATS NEW", "WHAT\u2019S NEW",
+        "TECHNICAL INNOVATION", "CAVEATS", "LINK",
+        "NAME", "DATE", "LOCATION", "ORGANIZER/EMPLOYER",
+        "ORGANIZER", "EMPLOYER", "RELEVANCE NOTE",
+    ]
+
+    # Build pattern: field_name possibly wrapped in ** or preceded by numbers
+    # Capture everything until the next known field or end of block
+    escaped_name = re.escape(field_name)
+    # Match field_name with optional bold markers, numbering, colons
+    field_pattern = rf"(?:\d+\.?\s*)?(?:\*\*)?{escaped_name}(?:\*\*)?[\s:]*"
+
+    # Build lookahead for the next field
+    next_fields = [re.escape(f) for f in all_fields if f.upper() != field_name.upper()]
+    next_field_pattern = "|".join(
+        rf"(?:\d+\.?\s*)?(?:\*\*)?{nf}(?:\*\*)?[\s:]"
+        for nf in next_fields
+    )
+    # Match until next field or end
+    if next_field_pattern:
+        pattern = rf"{field_pattern}(.*?)(?={next_field_pattern}|$)"
+    else:
+        pattern = rf"{field_pattern}(.*?)$"
+
     match = re.search(pattern, block, re.DOTALL | re.IGNORECASE)
     if match:
-        return match.group(1).strip()
+        value = match.group(1).strip()
+        # Clean up any trailing/leading artifacts
+        value = re.sub(r"^[:\-\s]+", "", value)
+        value = value.strip()
+        return value
     return ""
 
 
