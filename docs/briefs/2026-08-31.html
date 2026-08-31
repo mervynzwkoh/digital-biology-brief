@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — 2026-08-31</title>
+    <meta name="description" content="Weekly digest of frontier research, events, and jobs in ML for drug discovery, protein design, and virtual cell modelling — 2026-08-31">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --gradient-research: linear-gradient(135deg, #1a1b3a 0%, #162447 100%);
+            --gradient-events: linear-gradient(135deg, #1a2e1a 0%, #16341a 100%);
+            --gradient-jobs: linear-gradient(135deg, #2d1a1a 0%, #34231a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .date {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .item h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .item h3 a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .tag-source { color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.3); }
+        .tag-date { color: var(--text-muted); }
+
+        .item-body h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-body p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .item-body .caveats {
+            font-style: italic;
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+        }
+
+        /* Events & Jobs items — simpler layout */
+        .item-simple {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .item-simple .details {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .item-simple .details span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .item-simple .relevance {
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 0.3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .empty-section {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .item { padding: 1rem; }
+            .item-simple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <div class="date">2026-08-31</div>
+            <div class="subtitle">ML for drug discovery · Protein structure & design · Virtual cell modelling</div>
+        </header>
+
+        <!-- Research Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">🔬</span>
+                <h2>Frontier Research</h2>
+                <span class="count">4 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://doi.org/10.64898/2026.08.20.746077" target="_blank" rel="noopener">Sparse autoencoder features from InterPLM predict neuropeptide precursors among secreted proteins</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">Biorxiv</span>
+                    <span class="tag tag-date">2026-08-23</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Neuropeptides are a diverse class of short, secreted signaling molecules that regulate key physiological processes in animals. Despite their important biological roles and increasingly recognized ther</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://doi.org/10.64898/2026.05.07.721507" target="_blank" rel="noopener">A Beta-Binomial Model for Estimating Zero- or One-inflated Pain Trajectories</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">Biorxiv</span>
+                    <span class="tag tag-date">2026-08-23</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Chronic pain is a widespread public health issue that imposes substantial health, emotional, and economic burdens on individuals and communities. Because pain is subjective and lacks objective biomark</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://www.nature.com/articles/s41592-026-03184-w" target="_blank" rel="noopener">Overcoming air–water interface-induced artifacts in cryo-EM with protein nanocrates</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">Nature Methods</span>
+                    <span class="tag tag-date">2026-08-24</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Nature Methods, Published online: 24 August 2026; doi:10.1038/s41592-026-03184-w MS2 bacteriophage-derived protein shells called ‘nanocrates’ help address the air–water interface-induced artifacts in </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://www.nature.com/articles/s42256-026-01286-w" target="_blank" rel="noopener">A knowledge-driven framework for predicting single-cell responses for unprofiled drugs</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">Nature Machine Intelligence</span>
+                    <span class="tag tag-date">2026-08-26</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Nature Machine Intelligence, Published online: 26 August 2026; doi:10.1038/s42256-026-01286-w Feng et al. introduce MAP, an artificial intelligence framework that integrates biological mechanism knowl</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">📅</span>
+                <h2>Events</h2>
+                <span class="count">0 items</span>
+            </div>
+
+            
+            <p class="empty-section">No events this week.</p>
+            
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">💼</span>
+                <h2>Jobs</h2>
+                <span class="count">15 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/7dfea897af457a14937fb4bb683181c1" target="_blank" rel="noopener">Research Fellow (Cancer Science Institute, Prof Yang Zhang&#39;s Lab) 1</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-24</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/444529151a93871cf3e32c069a2f6257" target="_blank" rel="noopener">Research Officer (Computational Chemistry &amp; AI-Driven ADMET), BII</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/d032ef81aac3ca2d79c9f22d761c34f3" target="_blank" rel="noopener">Senior Quality Assurance Executive - IVD Product Development</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/ec91323d22574a53d86a5db1690d7b70" target="_blank" rel="noopener">Research Assistant (Cancer Science Institute, A/P Yvonne Tay&#39;s Lab</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-24</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/af20b05ab810f8830c4de710008b12fb" target="_blank" rel="noopener">Project Manager, AI in Drug Discovery (AIDD)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/fe6008fc3df0c6a47b7111e679d935b9" target="_blank" rel="noopener">Lab Officer</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-26</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c699572401b140076fb9b521a5aaf3e9" target="_blank" rel="noopener">Senior Software Engineer</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-25</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c2552ac55fc5f31955b163a08213409e" target="_blank" rel="noopener">Research Fellow (Chemistry)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-25</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/a5fdb8456d2ec9bbe55fbc859d1131b2" target="_blank" rel="noopener">Senior Admin Associate, Research Administration Support, AI in Drug Discovery (AIDD)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/23ff6b2743141b1f8aaaf5cb2b140755" target="_blank" rel="noopener">[Expression of Interest] Assay Development Scientist (Biotech)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f6cbb1e6967e2ced2291e17e59dbb8f4" target="_blank" rel="noopener">Research Assistant – Translational Pharmacology Unit</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-27</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/5aac7dbb9f23f016cba1e792489947bc" target="_blank" rel="noopener">Research Fellow (OR/EID/ML)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-25</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/recursionpharmaceuticals/jobs/8065801" target="_blank" rel="noopener">Director, Regulatory Affairs</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-24</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/recursionpharmaceuticals/jobs/8155674" target="_blank" rel="noopener">Director, Regulatory Affairs</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-24</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/2bccdbabd8d6459e80f73604d3e58d08" target="_blank" rel="noopener">Senior/ Laboratory Executive (Cancer Science Institute, Spatial Biology Core)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-27</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <footer>
+            <p>Generated 2026-08-31 01:11 UTC · <a href="../index.html">← Archive</a></p>
+            <p>Digital Biology Weekly Brief — automated with ❤️ and Claude Haiku</p>
+        </footer>
+    </div>
+</body>
+</html>
