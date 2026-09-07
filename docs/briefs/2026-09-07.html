@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — 2026-09-07</title>
+    <meta name="description" content="Weekly digest of frontier research, events, and jobs in ML for drug discovery, protein design, and virtual cell modelling — 2026-09-07">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --gradient-research: linear-gradient(135deg, #1a1b3a 0%, #162447 100%);
+            --gradient-events: linear-gradient(135deg, #1a2e1a 0%, #16341a 100%);
+            --gradient-jobs: linear-gradient(135deg, #2d1a1a 0%, #34231a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .date {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .item h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .item h3 a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .tag-source { color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.3); }
+        .tag-date { color: var(--text-muted); }
+
+        .item-body h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-body p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .item-body .caveats {
+            font-style: italic;
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+        }
+
+        /* Events & Jobs items — simpler layout */
+        .item-simple {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .item-simple .details {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .item-simple .details span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .item-simple .relevance {
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 0.3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .empty-section {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .item { padding: 1rem; }
+            .item-simple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <div class="date">2026-09-07</div>
+            <div class="subtitle">ML for drug discovery · Protein structure & design · Virtual cell modelling</div>
+        </header>
+
+        <!-- Research Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">🔬</span>
+                <h2>Frontier Research</h2>
+                <span class="count">12 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42601461/" target="_blank" rel="noopener">Aligning protein-generative models to experimental fitness with ProteinDPO.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-09-01</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Biological generative models can predict biological functions without task-specific training data but often under-perform specialized models. This is due to a fundamental &#39;alignment gap&#39;, where the ru</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2608.31009v1" target="_blank" rel="noopener">Language-Informed Flow Matching for Trend-Guided Structure-Based 3D Molecular Generation</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-08-31</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Structure-based drug design (SBDD) requires ligands that satisfy both 3D target affinity and 1D chemical validity. Existing controllable generation methods often rely on task-specific fine-tuning or e</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42675858/" target="_blank" rel="noopener">A computational framework integrating a protein language model with alchemical simulation for gain-of-function enzyme design.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-08-31</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Engineering enzymes with enhanced activity and stability is a central goal of biotechnology, yet the inherent trade-off between optimizing global protein fitness and specific substrate binding affinit</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42669100/" target="_blank" rel="noopener">ESM2-Kcr: a novel model combining protein language model and deep learning methods for predicting lysine crotonylation sites.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-08-30</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Lysine crotonylation (Kcr) is a vital posttranslational modification that plays a significant role in diverse biological processes such as DNA replication, the cell cycle, spermatogenesis, and embryon</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2609.03377v1" target="_blank" rel="noopener">SimpleDesign: A Joint Model for Protein Sequence and Structure Codesign</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-09-03</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Proteins are fundamental to biological processes, with their function determined by the complex interplay between the amino acid sequence and the three-dimensional structure. Developing generative mod</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42494422/" target="_blank" rel="noopener">Structure-guided computational design of DNA tweezers for predicted recognition of the primary glioblastoma biomarkers S100A4 and midkine.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-09-01</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Glioblastoma multiforme (GBM) is among the most aggressive malignant brain tumors and is characterized by severe infiltration into surrounding brain tissue, rendering early detection exceedingly diffi</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2609.02004v1" target="_blank" rel="noopener">InstEditSeg: Instruction-Driven Image Editing for Polyp and Skin Lesion Segmentation</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-09-02</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Accurate segmentation of polyps and skin lesions is pivotal for clinical diagnosis, yet existing methods struggle with low contrast, ambiguous boundaries, and cross-domain distribution discrepancies. </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2609.01353v1" target="_blank" rel="noopener">SymFold: Synergizing Evolutionary and Structural Priors for Accurate Protein Inverse Folding</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-09-01</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Protein inverse folding aims to recover amino acid sequences for a given 3D protein structure, underpinning broad applications such as enzyme engineering and drug discovery.Current methods often follo</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2608.30636v1" target="_blank" rel="noopener">MolLedger: An Additive Graph Neural Network with Chemically Grounded ADME Attributions</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-08-31</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Optimizing absorption, distribution, metabolism, and excretion (ADME) is an important part of small molecule drug discovery. Many machine learning models have been built to predict ADME properties to </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42701257/" target="_blank" rel="noopener">Biosynthesis of Crinipellin Diterpenes in Mushroom Marasmius fiardii PR-910.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-09-02</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Crinipellins are a distinctive family of 5/5/5/5 tetracyclic diterpenoids previously reported exclusively from mushrooms of the genus Crinipellis. Despite extensive synthetic studies, the biosynthetic</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42701296/" target="_blank" rel="noopener">Tuning the ZIKV NS3 Helicase Motor Activity through Magnesium Coordination and RNA-Driven Allostery.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-09-02</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Viral NS3 helicases convert the chemical energy of ATP hydrolysis into directional motion along nucleic acids, but the molecular basis of this coupling remains unclear. Here, we combine AI-based struc</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://pubmed.ncbi.nlm.nih.gov/42700840/" target="_blank" rel="noopener">Characterizing CCR2 homodimers using homology-derived and AI-predicted interfaces.</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">PubMed</span>
+                    <span class="tag tag-date">2026-09-05</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Deciphering the functional roles of G protein-coupled receptors (GPCRs) oligomers requires defining their structural organization, which remains a challenge due to the inherent flexibility of their 7 </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">📅</span>
+                <h2>Events</h2>
+                <span class="count">0 items</span>
+            </div>
+
+            
+            <p class="empty-section">No events this week.</p>
+            
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">💼</span>
+                <h2>Jobs</h2>
+                <span class="count">15 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/8483251e4316cabe60480ab39921d82c" target="_blank" rel="noopener">Research Officer, Skin Health &amp; Ageing, A*STAR Skin Research Labs</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/94bea8380ff689795004cede556ef05a" target="_blank" rel="noopener">Research Fellow (Cancer Science Institute, Prof Yang Zhang&#39;s Lab) 1 1</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-01</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f41648a82cb1869f60a8fe44d1046623" target="_blank" rel="noopener">Bioinformatician</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/de9f642155ef40b7be080015a49192ae" target="_blank" rel="noopener">Research Officer, AI &amp; Compute (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-01</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/79a87e4eb1bf091061aeebffeac5679f" target="_blank" rel="noopener">Senior Research Officer I, Bioinformatician, Laboratory of Translational Cancer Biology (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/8edb7bb1dcb392d1cac9573c002d77ab" target="_blank" rel="noopener">Scientist, A*STAR IDL</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/41fd7f3bc41de39772583ac51ab26f56" target="_blank" rel="noopener">Scientist (Skin Diseases &amp; Inflammation), A*STAR Skin Research Labs</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/2b22ce9ef6150d67aff73be55006c3ad" target="_blank" rel="noopener">Research Officer (Pathogen Immunobiology Lab), A*IDL</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/779c177bd533eb24487b5c16373ac6fc" target="_blank" rel="noopener">Research Assistant – Translational Pharmacology Unit</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-08-31</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/be686f9cd7a1152c1f01d0684fd5bcf4" target="_blank" rel="noopener">Research Fellow (OR/EID/OEE)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-01</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c936aafaa9a941642fed6955900b7c61" target="_blank" rel="noopener">Senior Manager / Assistant Director - Partnerships &amp; Product, BDH</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/47bc6a5aee147c3c212ff4bf254dfa55" target="_blank" rel="noopener">Scientist (Lay Lab), A*SRL</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/259afff203172efa4094980be908def7" target="_blank" rel="noopener">Research Officer (Infection and Immunity), A*IDL</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f2fc81a27e7a343363dd2fda414243c4" target="_blank" rel="noopener">Postdoctoral Research Scientist (Translational Bacteriology Lab), A*STAR ID Labs</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-02</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f48cfef2d97325385b1c4b5e469a1138" target="_blank" rel="noopener">Research Fellow (Surgery)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-09-01</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <footer>
+            <p>Generated 2026-09-07 00:45 UTC · <a href="../index.html">← Archive</a></p>
+            <p>Digital Biology Weekly Brief — automated with ❤️ and Claude Haiku</p>
+        </footer>
+    </div>
+</body>
+</html>
