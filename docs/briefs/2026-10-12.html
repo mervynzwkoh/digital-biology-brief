@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — 2026-10-12</title>
+    <meta name="description" content="Weekly digest of frontier research, events, and jobs in ML for drug discovery, protein design, and virtual cell modelling — 2026-10-12">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --gradient-research: linear-gradient(135deg, #1a1b3a 0%, #162447 100%);
+            --gradient-events: linear-gradient(135deg, #1a2e1a 0%, #16341a 100%);
+            --gradient-jobs: linear-gradient(135deg, #2d1a1a 0%, #34231a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .date {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .item h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .item h3 a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .tag-source { color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.3); }
+        .tag-date { color: var(--text-muted); }
+
+        .item-body h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-body p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .item-body .caveats {
+            font-style: italic;
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+        }
+
+        /* Events & Jobs items — simpler layout */
+        .item-simple {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .item-simple .details {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .item-simple .details span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .item-simple .relevance {
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 0.3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .empty-section {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .item { padding: 1rem; }
+            .item-simple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <div class="date">2026-10-12</div>
+            <div class="subtitle">ML for drug discovery · Protein structure & design · Virtual cell modelling</div>
+        </header>
+
+        <!-- Research Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">🔬</span>
+                <h2>Frontier Research</h2>
+                <span class="count">12 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.13106v1" target="_blank" rel="noopener">Scaling RNA Foundation Models through Iterative Refinement</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-09</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Biological function in RNA is encoded across scales, from local sequence motifs to long-range structural dependencies. Conventional RNA foundation models couple parameter capacity and inference depth </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.10850v1" target="_blank" rel="noopener">Similar Predictive Fit but Different Latent Dynamics: Characterizing Learned Dynamical Structure in Personalized Models of Brain Disorders</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-07</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>As AI models move toward clinical decision-making and personalized treatment, understanding \emph{what} a model learns is important beyond predictive accuracy alone. We investigate whether personalize</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.10210v1" target="_blank" rel="noopener">OrthoGen: A Generative Orthogonal Learner for Time-Varying Treatments</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-07</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Estimating conditional distributional potential outcomes (CDPOs) over time is important in medicine (e.g., to estimate patient-specific risks under different treatment sequences). However, this task i</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.09841v1" target="_blank" rel="noopener">ORCA: Hunting Compositional Failures in Text-to-Image Diffusion</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-07</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Text-to-image diffusion models fail predictably on compositional prompts: attributes bind to the wrong objects, spatial relations invert, and multi-object scenes lose count. Recent architectures alrea</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.13917v1" target="_blank" rel="noopener">Designing Protein Structures from Natural Language</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-09</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>A central challenge in de novo protein design is generating proteins with desired structural and functional properties. Existing design models typically require a dedicated input representation for ea</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.13779v1" target="_blank" rel="noopener">PhySeqNet: physics-informed fluorescent foci detection for BARseq spatial transcriptomics</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-09</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>BARseq enables spatially resolved gene-expression profiling across intact tissue, but its sensitivity depends on accurate detection and decoding of dense fluorescent rolonies. Existing spot-calling ap</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.13435v1" target="_blank" rel="noopener">PPG-Bench: A Unified Benchmark for PPG Foundation Models</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-09</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Photoplethysmography (PPG) is increasingly recorded by wearable and clinical devices at enormous scale, and a growing number of PPG foundation models (FMs) have been developed to compute reusable repr</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.12796v1" target="_blank" rel="noopener">Efficient Audio-Visual Speech Enhancement via Reinforcement Learning-Based Neural Architecture Search</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-08</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Audio-visual speech enhancement (AVSE) improves speech intelligibility in noisy environments but often relies on computationally expensive models unsuitable for resource-constrained edge devices. This</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.12340v1" target="_blank" rel="noopener">Ambient Discrete Diffusion: Using the Wrong Data at the Right Time for Data Efficient Learning</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-08</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>We introduce RefineMix, a framework for training discrete diffusion models under severe data scarcity, a common constraint in scientific applications. RefineMix uses out-of-distribution data at select</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.12528v1" target="_blank" rel="noopener">GlucoPRISM: Protocol-Supervised Pretraining for Cross-Cohort Glucose Transfer</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-08</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Continuous glucose monitoring (CGM) foundation models encode each day as one vector that mixes who the person is, what happened that day and how the sensor measured it, so measurement differences trav</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.11281v1" target="_blank" rel="noopener">How to post-train on a surrogate: Envelope sampling mitigates reward hacking</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-08</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Large language models (LLMs) are commonly post-trained against LLM judges and other cheap surrogates because the true reward, such as human preference, is too expensive to query at scale. This practic</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2610.10641v1" target="_blank" rel="noopener">Coverage-Aware Reasoning with Medical Tokens for Diagnosis Prediction</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-10-07</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Large language models (LLMs) offer promising potential for next-visit diagnosis prediction, owing to their ability to integrate longitudinal clinical evidence and reason over it in natural language. H</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">📅</span>
+                <h2>Events</h2>
+                <span class="count">0 items</span>
+            </div>
+
+            
+            <p class="empty-section">No events this week.</p>
+            
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">💼</span>
+                <h2>Jobs</h2>
+                <span class="count">15 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/8edbb3ebda607fabfb1af6526f3b54b1" target="_blank" rel="noopener">Research Fellow (Computer Science/AI/Computational Biology/Bioinformatics)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-10</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/1ea698939214b46992b2e8f486e91083" target="_blank" rel="noopener">Scientist / Senior Scientist I, Human Development, IHDP</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-07</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/27a5b60b45a1d80941d313896e4ccf7f" target="_blank" rel="noopener">Scientist - AI in Drug Discovery (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/8a97dcf40df67485d22f24d250dab900" target="_blank" rel="noopener">Scientist, Synthetic Biology &amp; Gene Editing Therapeutics (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/f94e85f61ee3842b1701732926c1b430" target="_blank" rel="noopener">AI Scientist - Generative AI Models for the Creation of RNA-Based Drugs (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-08</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c690512afa710bb361510d017e747e9f" target="_blank" rel="noopener">Data Scientist</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-05</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/33cce75da1c195b884b408983f037fc9" target="_blank" rel="noopener">Scientist (Postdoctoral Fellow: Computational Methods for Long Read RNA-Seq data), GIS</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/31e376455d9633618633f5481cbbaff6" target="_blank" rel="noopener">Research Scientist (Mid-Size Molecule Unit)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-07</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c56173c7041e2700c53d0ca3a9238154" target="_blank" rel="noopener">Research Officer, Lab of AI &amp; Compute (GIS)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/29402b0ae8a0320a8a6bd792e729680e" target="_blank" rel="noopener">GIS Fellow</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/7365b8ab118d1547a3f98ed6d2dc9601" target="_blank" rel="noopener">Research Fellow (Pharmacy and Pharmaceutical Sciences)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-05</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/322ee90c0856946d890a4bb666c2191c" target="_blank" rel="noopener">Research Fellow (Pharmacy and Pharmaceutical Sciences)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-05</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/53dd63ed7e603c78c3b164fbd733ce96" target="_blank" rel="noopener">Research Fellow (Pharmacy and Pharmaceutical Sciences)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-05</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/47ac7a342f55290c365e6e358ed42dc9" target="_blank" rel="noopener">Research Fellow (Plant Biotechnology and Biochemistry)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-07</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/d66ffade153a156854cfcb543aa3545e" target="_blank" rel="noopener">Assistant Professor (Cancer Science Institute)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-09</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <footer>
+            <p>Generated 2026-10-12 02:09 UTC · <a href="../index.html">← Archive</a></p>
+            <p>Digital Biology Weekly Brief — automated with ❤️ and Claude Haiku</p>
+        </footer>
+    </div>
+</body>
+</html>
