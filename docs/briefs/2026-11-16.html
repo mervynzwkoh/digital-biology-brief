@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Biology Weekly Brief — 2026-11-16</title>
+    <meta name="description" content="Weekly digest of frontier research, events, and jobs in ML for drug discovery, protein design, and virtual cell modelling — 2026-11-16">
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #bc8cff;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --gradient-research: linear-gradient(135deg, #1a1b3a 0%, #162447 100%);
+            --gradient-events: linear-gradient(135deg, #1a2e1a 0%, #16341a 100%);
+            --gradient-jobs: linear-gradient(135deg, #2d1a1a 0%, #34231a 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header .date {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        header .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .section-header .count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .item h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .item h3 a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .item h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .item-meta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .tag-source { color: var(--accent-purple); border-color: rgba(188, 140, 255, 0.3); }
+        .tag-date { color: var(--text-muted); }
+
+        .item-body h4 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-body p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        .item-body .caveats {
+            font-style: italic;
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+        }
+
+        /* Events & Jobs items — simpler layout */
+        .item-simple {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: start;
+        }
+
+        .item-simple .details {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .item-simple .details span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .item-simple .relevance {
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            margin-top: 0.3rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .empty-section {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.4rem; }
+            .item { padding: 1rem; }
+            .item-simple { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 Digital Biology Weekly Brief</h1>
+            <div class="date">2026-11-16</div>
+            <div class="subtitle">ML for drug discovery · Protein structure & design · Virtual cell modelling</div>
+        </header>
+
+        <!-- Research Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">🔬</span>
+                <h2>Frontier Research</h2>
+                <span class="count">12 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.16881v1" target="_blank" rel="noopener">Protein Language Models Fail To Capture Contact Predictions Under Invariant Relabeling</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Protein language models (pLMs) produce highly accurate contact maps from single-sequence inputs. People often take this accuracy as proof that these models implicitly learn invariant coevolutionary st</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.15109v1" target="_blank" rel="noopener">Expanding the Decision Space of Pretrained Models through Structured Re-Decoding</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-11</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Native decoders limit how pretrained models combine local predictions under new structural constraints. We introduce Structured Re-Decoding (SRD), a training-free framework that constructs local candi</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17650v1" target="_blank" rel="noopener">Classifier-Guided Latent Diffusion for Small-Molecule Generation</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-13</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Diffusion models have emerged as a promising class of generative models for molecular design because of their ability to learn complex chemical distributions and support conditional or guided generati</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.14956v1" target="_blank" rel="noopener">Binding Mode Matters: Hotspot-Aware Drug Discovery via Explorative Preferences</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-11</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Discovering hit molecules requires not just high binding affinity, but also the identification of diverse binding modes, which are critical for experimental assays. Existing generative approaches have</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17899v1" target="_blank" rel="noopener">More Genes, Faster Inference: Efficient Large-Panel Spatial Transcriptomics Prediction from Histology</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-13</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Spatial transcriptomics (ST) prediction from histology aims to infer spatially resolved gene expression profiles directly from tissue images. This is a challenging problem that is currently often addr</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17031v1" target="_blank" rel="noopener">Your Vision Foundation Model Is Secretly an EEG Foundation Model</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Electroencephalography (EEG) foundation models are pretrained on thousands of hours of recordings, yet their frozen features transfer poorly to downstream tasks, and this transfer does not consistentl</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17391v1" target="_blank" rel="noopener">Confident and Wrong: Structure Confidence Is a Poor Selection Filter for Protein Function</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Structure-guided protein design can generate plausible candidates, but structural confidence does not predict function. We trained a function-guided model on measured metal-binding affinity with prote</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.14511v1" target="_blank" rel="noopener">Pyrite: Building and Benchmarking Protein-Ligand Pose Ranking Agents</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-10</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Predicting how a ligand binds to its target is central to small-molecule drug discovery. Modern cofolding models can generate diverse candidate poses, but reliably ranking these candidates remains cha</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.14287v1" target="_blank" rel="noopener">ANTIOCH-VS: From Sequence to Hits with Modular, Open-Source Ensemble Virtual Screening</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-10</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Structure-based virtual screening needs a receptor conformation that fits the ligand class, but for most targets no ligand-bound crystal is available -- and a single predicted model or an apo structur</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17468v1" target="_blank" rel="noopener">A thorough review on Deep Learning approaches to 2D-to-3D Registration in Medical Imaging</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>2D-to-3D image registration is a key component for several medical imaging purposes such as intraoperative guidance, enabling the alignment between preoperative 3D volumes and real-time 2D images. Whi</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17134v1" target="_blank" rel="noopener">Support-Constrained Offline Policy Improvement for Pediatric ECMO from Limited Clinical Data</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Managing children on ECMO (Extracorporeal Membrane Oxygenation) requires balancing short-term physiological stability with the long-term goal of preventing neurological injury. Standard reinforcement </p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <h3><a href="https://arxiv.org/abs/2611.17015v1" target="_blank" rel="noopener">AI for Biologists: The Knowledge Boundaries of Foundation Models in the Age of Agentic Systems</a></h3>
+                </div>
+                <div class="item-meta">
+                    <span class="tag tag-source">arXiv</span>
+                    <span class="tag tag-date">2026-11-12</span>
+                </div>
+                <div class="item-body">
+                    
+                    <h4>What's New</h4>
+                    <p>Artificial intelligence (AI) is changing how biological research is done. Biological foundation models trained on millions of nucleotides, protein, and single-cell measurements predict protein structu</p>
+                    
+
+                    
+                    <h4>Technical Innovation</h4>
+                    <p>(Summarization failed — see original)</p>
+                    
+
+                    
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Events Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">📅</span>
+                <h2>Events</h2>
+                <span class="count">2 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.sginnovate.com/event/nucleus-launch-and-networking-event" target="_blank" rel="noopener">NUCLEUS Launch and Networking Event</a></h3>
+                        <div class="details">
+                            <span>📆 2026-11-16</span>
+                            <span>📍 (extraction failed)</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.sginnovate.com/event/hyper-interdisciplinary-conference-singapore" target="_blank" rel="noopener">Hyper Interdisciplinary Conference Singapore</a></h3>
+                        <div class="details">
+                            <span>📆 2026-11-16</span>
+                            <span>📍 (extraction failed)</span>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <!-- Jobs Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="icon">💼</span>
+                <h2>Jobs</h2>
+                <span class="count">15 items</span>
+            </div>
+
+            
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/fe66ae66e9b69aae7723f6eb63445462" target="_blank" rel="noopener">Scientist, Drug Discovery (A*STAR BII)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c8b6b8bd974510edfe4526252af352ac" target="_blank" rel="noopener">Manager/Senior Manager/Assistant Director in Tech Biz, BII</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/046d427e43f711c925df810bda9f4177" target="_blank" rel="noopener">Senior Scientist II, AIDD Computational Chemist</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/9e72eab0bb69f7fddb3f7b90be59df5e" target="_blank" rel="noopener">Senior Admin Associate, Research Administration Support, AI in Drug Discovery (AIDD)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/013a7a105470c49f857ee7b45abef8cf" target="_blank" rel="noopener">Data Scientist (AIDD)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/dc70ebc70e039d2f81f6ff3b14b06291" target="_blank" rel="noopener">Senior Scientist in Mid-size Molecule Unit</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-12</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c63c69eeb12c8d4ee48a510e9bdd27e4" target="_blank" rel="noopener">Senior Specialist, Data Science (AI/ML Imaging &amp; Omics), Quantitative Biosciences</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-10</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/eb1253a588c6dd6d25c6b41fcf669aa7" target="_blank" rel="noopener">Medicinal Chemist, AI in Drug Discovery</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/d1f47b8ec15973b5827ac9047f456efa" target="_blank" rel="noopener">Associate Project Manager</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-28</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/ed67bd80b237ea0de7954546c6309eb0" target="_blank" rel="noopener">Postdoctoral Scientist</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-27</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/e0d3cbe2a93e94a5f710726bacf41e72" target="_blank" rel="noopener">Research Scientist (Enzyme Engineering)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-20</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/446e7d61974b1a3cf2a92f42f504a99b" target="_blank" rel="noopener">Senior Scientist (Molecular Design &amp; Synthesis)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-19</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://job-boards.greenhouse.io/recursionpharmaceuticals/jobs/8334716" target="_blank" rel="noopener">Principal AI Researcher</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-10-29</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/c1fd531a98510fad61794dfafd820d82" target="_blank" rel="noopener">Group Leader, Skeletal Muscle Biology &amp; Targeted Oligonucleotide Delivery (NATi)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-simple">
+                    <div>
+                        <h3><a href="https://www.mycareersfuture.gov.sg/job/d7bd0d1daffe96e6de28638a0aac404d" target="_blank" rel="noopener">Digitalization Lead (Permanent)</a></h3>
+                        <div class="details">
+                            
+                            <span>📍 (extraction failed)</span>
+                            <span>📆 Posted: 2026-11-13</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </section>
+
+        <footer>
+            <p>Generated 2026-11-16 02:38 UTC · <a href="../index.html">← Archive</a></p>
+            <p>Digital Biology Weekly Brief — automated with ❤️ and Claude Haiku</p>
+        </footer>
+    </div>
+</body>
+</html>
